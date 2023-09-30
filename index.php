@@ -22,7 +22,7 @@
                 if (isset($_GET['sign-up'])) {
                 ?>
                     <div class="d-flex justify-content-center form_container">
-                        <form method="POST">
+                        <form method='post'>
                             <div class="input-group mb-3">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
@@ -48,7 +48,7 @@
                                 <input type="password" name="su_cPass" class="form-control input_pass" value="" placeholder="confirm password">
                             </div>
                             <div class="d-flex justify-content-center mt-3 login_container">
-                                <button type="button" name="signUp-btn" class="btn login_btn">Submit</button>
+                                <button type="submit" name="signUp-btn" class="btn login_btn">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -76,7 +76,7 @@
                                 <input type="password" name="" class="form-control input_pass" value="" placeholder="password">
                             </div>
                             <div class="d-flex justify-content-center mt-3 login_container">
-                                <button type="button" name="button" class="btn login_btn">Login</button>
+                                <button type="submit" name="button" class="btn login_btn">Login</button>
                             </div>
                         </form>
                     </div>
@@ -96,8 +96,8 @@
         </div>
     </div>
 
-    <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>
@@ -105,31 +105,29 @@
 <?php
 require_once('admin/includes/config.php');
 
-// if (isset($_POST['signUp-btn'])) {
+if (isset($_POST['signUp-btn'])) {
 
-//     $su_emailId = mysqli_escape_string($db, $_POST['su_emailId']);
-//     $su_phoneNo = mysqli_escape_string($db, $_POST['su_phoneNo']);
-//     $su_pass = mysqli_escape_string($db, $_POST['su_pass']);
-//     $su_cPass = mysqli_escape_string($db, $_POST['su_cPass']);
-//     $su_user_role = 'voter';
+    $su_emailId = mysqli_escape_string($db, $_POST['su_emailId']);
+    $su_phoneNo = mysqli_escape_string($db, $_POST['su_phoneNo']);
+    $su_pass = mysqli_escape_string($db, $_POST['su_pass']);
+    $su_cPass = mysqli_escape_string($db, $_POST['su_cPass']);
+    $su_user_role = 'voter';
 
-//     if ($su_pass == $su_cPass) {
-//         // insert Query
-//         mysqli_query($db, "INSERT INTO users(username,phone_no,password,user_role) VALUES('" . $su_emailId . "','" . $su_phoneNo . "','" . $su_pass . "','" . $user_role . "')")
-//             or die(mysqli_error($db));
-
-// ?>
-//         <script>
-//             location.assign('index.php?sign-up=1&registered=1');
-//         </script>
-//     <?
-
-//     } else {
-//     ?>
-//         <script>
-//             location.assign('index.php?sign-up=1&invalid=1');
-//         </script>
-// <?
-//     }
-// }
+    if ($su_pass == $su_cPass) {
+        // insert Query
+        mysqli_query($db, "INSERT INTO users(email_id,phone_no,password,user_role) VALUES('" . $su_emailId . "','" . $su_phoneNo . "','" . $su_pass . "','" . $user_role . "')")
+            or die(mysqli_error($db));
+             ?>
+            <script>
+                location.assign("index.php?sign-up=1&registered=1");
+             </script>
+        <?php
+    } else {
+        ?>
+            <script>
+                location.assign("index.php?sign-up=1&invalid=1");
+             </script>
+        <?php
+    }
+}
 ?>
