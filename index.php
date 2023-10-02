@@ -171,12 +171,14 @@ if (isset($_POST['signUp-btn'])) {
             $_SESSION['email_id'] = $data['email_id'];
 
             if($data['user_role'] === 'Admin'){
+                $_SESSION['key'] == "AdminKey";
              ?>
             <script>
                 location.assign("admin/index.php");
              </script>
         <?php
             }else{
+                $_SESSION['key'] == "VotersKey";
              ?>
             <script>
                 location.assign("voters/index.php");
