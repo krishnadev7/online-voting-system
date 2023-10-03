@@ -33,7 +33,7 @@
                 
             ?>
     </span>
-            <div class="user_card">
+            <div class="user_card ">
                 <div class="d-flex justify-content-center">
                     <div class="brand_logo_container">
                         <img src="assets/images/vote-logo.jpg" class="brand_logo" alt="Logo">
@@ -120,8 +120,6 @@
 
     </div>
 
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>
@@ -171,14 +169,14 @@ if (isset($_POST['signUp-btn'])) {
             $_SESSION['email_id'] = $data['email_id'];
 
             if($data['user_role'] === 'Admin'){
-                $_SESSION['key'] == "AdminKey";
+                $_SESSION['key'] = "AdminKey";
              ?>
             <script>
                 location.assign("admin/index.php");
              </script>
         <?php
             }else{
-                $_SESSION['key'] == "VotersKey";
+                $_SESSION['key'] = "VotersKey";
              ?>
             <script>
                 location.assign("voters/index.php");
