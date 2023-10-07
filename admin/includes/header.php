@@ -20,8 +20,8 @@
 </head>
 <body>
     
-<div class="container-fluid">
-    <div class="row  text-white" style="background-color: black;">
+<div class="container-fluid " style="background-color: black;">
+    <div class="row   text-white" >
         <div class="col-1">
             <img src="../assets/images/vote-logo.jpg" alt="vote-logo" width="80px" />
         </div>

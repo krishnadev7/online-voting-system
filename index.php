@@ -120,6 +120,8 @@
 
     </div>
 
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
 </body>
 
 </html>
@@ -172,7 +174,7 @@ if (isset($_POST['signUp-btn'])) {
                 $_SESSION['key'] = "AdminKey";
              ?>
             <script>
-                location.assign("admin/index.php");
+                location.assign("admin/index.php?homepage=1");
              </script>
         <?php
             }else{
