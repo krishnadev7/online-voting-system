@@ -20,20 +20,43 @@
     <div class="col-8">
         <h3>Upcoming Elections</h3>
         <table class="table">
-  <thead class="thead-dark">
-     <tr>
-      <th scope="col">S.No.</th>
-      <th scope="col">Election Name</th>
-      <th scope="col"># Candidates</th>
-      <th scope="col">Starting Date</th>
-      <th scope="col">Ending Date</th>
-      <th scope="col">Status</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">Election Name</th>
+            <th scope="col"># Candidates</th>
+            <th scope="col">Starting Date</th>
+            <th scope="col">Ending Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+            </tr>
+        </thead>
+     </table>
     </div>
 </div>
+
+
+<?php
+     if(isset($_POST['addElectionBtn'])){
+        $election_topic = mysqli_real_escape_string($db,$_POST['election_topic']);
+        $no_of_candidates = mysqli_real_escape_string($db,$_POST['no_of_candidates']);
+        $starting_date = mysqli_real_escape_string($db,$_POST['starting_date']);
+        $ending_date = mysqli_real_escape_string($db,$_POST['ending_date']);
+        $inserted_by = $_SESSION['email_id'];
+        $inserted_on = date("Y-m-d");
+
+        $date1 = date_create($inserted_on);
+        $date2 = date_create($starting_date);
+        $diff = date_diff($date1,$date2);
+       
+
+        if($diff->format("%R%a") > 0){
+             echo "Active";
+        }else{
+            echo "Inactive";
+        };
+
+        //Inserting into db
+        // mysqli_query($db,"INSERT INTO elections(election_topic,no_of_candidates,starting_date,ending_date,status,inserted_by,inserted_on) VALUES ('". ."')")
+     }
+?>
