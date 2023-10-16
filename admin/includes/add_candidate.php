@@ -5,23 +5,29 @@ if (isset($_GET['added'])) {
         New Candidate has been added successfully...!
     </div>
 <?php
-} else if ($_GET['largeFile']) {
+} else if (isset($_GET['largeFile'])) {
 ?>
     <div class="alert alert-warning col-4 m-2" role="alert">
         Candidate image is too large, consider upload image less than 5mb.
     </div>
+
 <?php
-}else if ($_GET['invalidFile']){
+} else if (isset($_GET['invalidFile'])) {
+
 ?>
     <div class="alert alert-warning col-4 m-2" role="alert">
         Invalid file format...!, Only .jpg, .jpeg, .png files are allowed.
     </div>
+
 <?php
-}else if ($_GET['failed']){
+
+} else if (isset($_GET['failed'])) {
+
 ?>
     <div class="alert alert-danger col-4 m-2" role="alert">
         Image upload failed!. Please try again...
     </div>
+
 <?php
 }
 ?>
@@ -129,39 +135,49 @@ if (isset($_POST['addCandidateBtn'])) {
     $candidate_photo =  $targetted_folder . rand(1111111111, 99999999999) . $_FILES['candidate_photo']['name'];
     $candidate_photo_tmp_name = $_FILES['candidate_photo']['tmp_name'];
     $candidate_photo_type = strtolower(pathinfo($candidate_photo, PATHINFO_EXTENSION));
-    $allowed_types = array("jpg,jpeg,png");
+    $allowed_types = array("jpg","jpeg","png");
     $candidate_photo_size = $_FILES['candidate_photo']['size'];
 
     // candidate photo must be less than 5mb; 5mb === 5000000 bytes
     if ($candidate_photo_size < 5000000) {
-        if(in_array($candidate_photo_type,$allowed_types)){
-            if(move_uploaded_file($candidate_photo_tmp_name,$candidate_photo)){
+        if (in_array($candidate_photo_type, $allowed_types)) {
+            if (move_uploaded_file($candidate_photo_tmp_name, $candidate_photo)) {
 
-            }else{
-                echo "<script>location.assign('ndex.php?addCandidate=1&failed=1')</script>";
-  
+                //Inserting into db
+                mysqli_query($db, "INSERT INTO candidate_details(election_id,candidate_name,candidate_details,candidate_photo,inserted_by,inserted_on)
+                VALUES ('" . $election_id . "','" . $candidate_name . "','" . $candidate_details . "','" . $candidate_photo . "', '" . $inserted_by . "',
+                '" . $inserted_on . "')") or die(mysqli_error($db));
+
+             
+            ?>
+                 <script>
+                    location.assign("index.php?addElections=1&added=1")
+                </script> 
+            <?php
+
+            } else {
+            ?>
+                <script>
+                    location.assign("index.php?addCandidate=1&failed=1")
+                </script>
+            <?php
             }
-        }else{
-            echo "<script>location.assign('ndex.php?addCandidate=1&invalidFile=1')</script>";
+        } else {
+            ?>
+            <script>
+                location.assign("index.php?addCandidate=1&invalidFile=1")
+            </script>
+        <?php
         }
     } else {
-        echo "<script>location.assign('ndex.php?addCandidate=1&largeFile=1')</script>";
+        ?>
+        <script>
+            location.assign("index.php?addCandidate=1&largeFile=1")
+        </script>
+<?php
     }
 
     echo $candidate_photo_type;
-
-
-    //Inserting into db
-    // mysqli_query($db, "INSERT INTO elections(election_topic,no_of_candidates,starting_date,ending_date,status,inserted_by,inserted_on)
-    //     VALUES ('" . $election_topic . "','" . $no_of_candidates . "','" . $starting_date . "','" . $ending_date . "','" . $status . "',
-    //     '" . $inserted_by . "','" . $inserted_on . "')") or die(mysqli_error($db));
-
-    // 
-?>
-    <!-- // <script>
-        location.assign("index.php?addElections=1&added=1")
-    </script> -->
-<?php
 }
 
 ?>
