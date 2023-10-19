@@ -22,3 +22,10 @@ input[type="number"] {
 .text-green{
     color: green;
 }
+
+.candidate-photo{
+    width:80px; 
+    height: 80px; 
+    border: 2px solid yellow;
+    border-radius:100%;
+}

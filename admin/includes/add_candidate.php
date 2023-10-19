@@ -47,9 +47,17 @@ if (isset($_GET['added'])) {
                         while ($row = mysqli_fetch_assoc($fetchingElections)) {
                             $election_id = $row['id'];
                             $election_name = $row['election_topic'];
+                            $sllowed_candidates = $row['no_of_candidates'];
+
+                            //checking how many candidates are added in the election
+                            $fetchingCandidateDetails = mysqli_query($db, "SELECT * FROM candidate_details WHERE election_id = '" . $election_id . "' ") or die(mysqli_error($db));
+                            $addedCandidates = mysqli_num_rows($fetchingCandidateDetails);
+
+                            if ($addedCandidates < $sllowed_candidates) {
                     ?>
-                            <option value="<?php echo $election_id; ?>" class="text-black"><?php echo $election_name; ?></option>
+                                <option value="<?php echo $election_id; ?>" class="text-black"><?php echo $election_name; ?></option>
                         <?php
+                            }
                         }
                     } else {
                         ?>
@@ -77,30 +85,34 @@ if (isset($_GET['added'])) {
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">S.No.</th>
-                    <th scope="col">Election Topic</th>
-                    <th scope="col"># Candidates</th>
-                    <th scope="col">Starting Date</th>
-                    <th scope="col">Ending Date</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Photo</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Election</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $fetchingData = mysqli_query($db, "SELECT * FROM elections") or die(mysqli_error($db));
-                $isAnyElectionAdded = mysqli_num_rows($fetchingData);
+                $fetchingData = mysqli_query($db, "SELECT * FROM candidate_details") or die(mysqli_error($db));
+                $isAnyCandidateAdded = mysqli_num_rows($fetchingData);
 
-                if ($isAnyElectionAdded) {
+                if ($isAnyCandidateAdded) {
                     $sno = 1;
                     while ($row = mysqli_fetch_assoc($fetchingData)) {
+                        $election_id = $row['election_id'];
+                        $fetchingElectionName = mysqli_query($db, "SELECT * FROM elections WHERE id = '" . $election_id . "' ")
+                            or die(mysqli_error($db));
+                        $fetchinELectionNameQuery = mysqli_fetch_assoc($fetchingElectionName);
+                        $election_name = $fetchinELectionNameQuery['election_topic'];
+                        $candidate_photo = $row['candidate_photo'];
                 ?>
                         <tr>
                             <td><?php echo $sno++; ?></td>
-                            <td><?php echo $row['election_topic']; ?></td>
-                            <td><?php echo $row['no_of_candidates']; ?></td>
-                            <td><?php echo $row['starting_date']; ?></td>
-                            <td><?php echo $row['ending_date']; ?></td>
-                            <td><?php echo $row['status']; ?></td>
+                            <td><img style="width:80px; height: 80px; border: 5px solid #FFD700; border-radius: 100%;" src="<?php echo $candidate_photo ?>"></td>
+                            <td><?php echo $row['candidate_name']; ?></td>
+                            <td><?php echo $row['candidate_details']; ?></td>
+                            <td><?php echo $election_name; ?></td>
                             <td>
                                 <a href="" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="" class="btn btn-sm btn-danger">Delete</a>
@@ -135,7 +147,7 @@ if (isset($_POST['addCandidateBtn'])) {
     $candidate_photo =  $targetted_folder . rand(1111111111, 99999999999) . $_FILES['candidate_photo']['name'];
     $candidate_photo_tmp_name = $_FILES['candidate_photo']['tmp_name'];
     $candidate_photo_type = strtolower(pathinfo($candidate_photo, PATHINFO_EXTENSION));
-    $allowed_types = array("jpg","jpeg","png");
+    $allowed_types = array("jpg", "jpeg", "png");
     $candidate_photo_size = $_FILES['candidate_photo']['size'];
 
     // candidate photo must be less than 5mb; 5mb === 5000000 bytes
@@ -148,11 +160,11 @@ if (isset($_POST['addCandidateBtn'])) {
                 VALUES ('" . $election_id . "','" . $candidate_name . "','" . $candidate_details . "','" . $candidate_photo . "', '" . $inserted_by . "',
                 '" . $inserted_on . "')") or die(mysqli_error($db));
 
-             
-            ?>
-                 <script>
-                    location.assign("index.php?addElections=1&added=1")
-                </script> 
+
+?>
+                <script>
+                    location.assign("index.php?addCandidate=1&added=1")
+                </script>
             <?php
 
             } else {
