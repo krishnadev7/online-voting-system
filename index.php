@@ -169,6 +169,7 @@ if (isset($_POST['signUp-btn'])) {
             session_start();
             $_SESSION['user_role'] = $data['user_role'];
             $_SESSION['email_id'] = $data['email_id'];
+            $_SESSION['user_id'] = $data['id'];
 
             if($data['user_role'] === 'Admin'){
                 $_SESSION['key'] = "AdminKey";

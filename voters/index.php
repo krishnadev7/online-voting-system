@@ -41,15 +41,37 @@ require_once("./includes/navigation.php");
                             $candidate_photo = $candidateData['candidate_photo'];
 
                             //fetching candidate votes
-                            $fetchingVotes = mysqli_query($db,"SELECT * FROM votings WHERE candidate_id = '".$candidate_id."' ") or die(mysqli_error($db));
+                            $fetchingVotes = mysqli_query($db, "SELECT * FROM votings WHERE candidate_id = '" . $candidate_id . "' ") or die(mysqli_error($db));
                             $totalVotes = mysqli_num_rows($fetchingVotes);
+
 
                         ?>
                             <tr>
                                 <td><img style="width:80px; height: 80px; border: 5px solid #FFD700; border-radius: 100%;" src="<?php echo $candidate_photo; ?> "></td>
                                 <td><?php echo "<b>" . $candidateData['candidate_name'] . "</b> <br>" . $candidateData['candidate_details']  ?></td>
-                                <td><?php echo $totalVotes?></td>
-                                <td><button class="btn btn-success">Vote</button></td>
+                                <td><?php echo $totalVotes ?></td>
+                                <td>
+                                    <?php
+                                    $checkIfVoteCasted = mysqli_query($db, "SELECT * FROM votings WHERE voters_id= '" . $_SESSION['user_id'] . "' AND election_id = '" . $election_id . "'") or die(mysqli_error($db));
+                                    $isVoteCasted = mysqli_num_rows($checkIfVoteCasted);
+
+                                    if ($isVoteCasted) {
+                                        $voteCastedData = mysqli_fetch_assoc($checkIfVoteCasted);
+                                        $voteCastedToCandidate = $voteCastedData['candidate_id'];
+
+                                        if ($voteCastedToCandidate == $candidate_id) {
+                                        ?>
+                                            <p class="text-success">Already voted</p>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <button class="btn btn-success" onclick="castVote(<?php echo $election_id; ?>,<?php echo $candidate_id; ?>, <?php echo $_SESSION['user_id']; ?>)">Vote</button>
+                                    <?php
+                                    }
+
+                                    ?>
+                                </td>
                             </tr>
                         <?php
                         }
@@ -70,3 +92,20 @@ require_once("./includes/navigation.php");
 <?php
 require_once("./includes/footer.php");
 ?>
+
+<script>
+    function castVote(election_id, candidate_id, voter_id) {
+        $.ajax({
+            type: "POST",
+            url: "includes/ajaxCalls.php",
+            data: `e_id=${election_id}&c_id=${candidate_id}&v_id=${voter_id}`,
+            success: function(response) {
+                if (response == "success") {
+                    location.assign("index.php?voteCasted=1");
+                } else {
+                    location.assign("index.php?voteNotCasted=1");
+                }
+            }
+        })
+    }
+</script>
