@@ -87,15 +87,18 @@
         $inserted_by = $_SESSION['email_id'];
         $inserted_on = date("Y-m-d");
 
-        $date1 = date_create($inserted_on);
-        $date2 = date_create($starting_date);
-         
-        
-        if ($date1 > $date2) {
-            $status = "InActive";
-        } else {
+        $curr_date = date_create($inserted_on);
+        $start_date = date_create($starting_date);
+        $end_date = date_create($ending_date);
+
+
+        if ($curr_date < $start_date) {
+            $status = "Inactive";
+        } elseif ($curr_date >= $start_date && $curr_date <= $end_date) {
             $status = "Active";
-        }
+        } else {
+            $status = "Inactive";
+        }  
 
         //Inserting into db
         mysqli_query($db,"INSERT INTO elections(election_topic,no_of_candidates,starting_date,ending_date,status,inserted_by,inserted_on)

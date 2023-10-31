@@ -1,3 +1,42 @@
+<?php
+    require_once("./admin/includes/config.php");
+
+    $fetchingElections = mysqli_query($db, "SELECT * FROM elections") or die(mysqli_error($db));
+
+    while($data = mysqli_fetch_assoc($fetchingElections)){
+
+        $starting_date = $data['starting_date'];
+        $ending_date = $data['ending_date'];
+        $curr_date = date("Y-m-d");
+        $election_id = $data['id'];
+        $status = $data['status'];
+
+        if($status == 'Active'){
+        $date1 = date_create($curr_date);
+        $date2 = date_create($ending_date);
+
+
+        if ($date1 > $date2) {
+            // updating
+            mysqli_query($db,"UPDATE elections SET status = 'Expired' WHERE id = '".$election_id."'") or die(mysqli_error($db));
+        } 
+
+        }elseif($status == 'Inactive'){
+        $date1 = date_create($curr_date);
+        $date2 = date_create($starting_date);
+
+
+        if ($date1 <= $date2) {
+            // update
+            mysqli_query($db, "UPDATE elections SET status = 'Active' WHERE id = '" . $election_id . "'") or die(mysqli_error($db));
+        } 
+        }  
+
+        }
+
+?>
+
+
 <!DOCTYPE html>
 <html>
 

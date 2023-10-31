@@ -61,7 +61,7 @@ require_once("./includes/navigation.php");
 
                                         if ($voteCastedToCandidate == $candidate_id) {
                                         ?>
-                                            <p class="text-success">Already voted</p>
+                                            <p class="bg-success col-3 p-2 text-white">Voted</p>
                                         <?php
                                         }
                                     } else {
