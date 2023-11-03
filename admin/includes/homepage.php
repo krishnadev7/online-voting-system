@@ -1,51 +1,50 @@
-
 <div class="row m-1">
     <div class="col-12">
         <h3>Upcoming Elections</h3>
         <table class="table">
-        <thead class="thead-dark">
-            <tr>
-            <th scope="col">S.No.</th>
-            <th scope="col">Election Topic</th>
-            <th scope="col"># Candidates</th>
-            <th scope="col">Starting Date</th>
-            <th scope="col">Ending Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Election Topic</th>
+                    <th scope="col"># Candidates</th>
+                    <th scope="col">Starting Date</th>
+                    <th scope="col">Ending Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
                 <?php
-                    $fetchingData = mysqli_query($db,"SELECT * FROM elections") or die(mysqli_error($db));
-                    $isAnyElectionAdded = mysqli_num_rows($fetchingData);
+                $fetchingData = mysqli_query($db, "SELECT * FROM elections") or die(mysqli_error($db));
+                $isAnyElectionAdded = mysqli_num_rows($fetchingData);
 
-                    if($isAnyElectionAdded){
-                        $sno = 1;
-                        while($row = mysqli_fetch_assoc($fetchingData)){
-                            ?>
-                                <tr>
-                                    <td><?php echo $sno++;?></td>
-                                    <td><?php echo $row['election_topic'];?></td>
-                                    <td><?php echo $row['no_of_candidates'];?></td>
-                                    <td><?php echo $row['starting_date'];?></td>
-                                    <td><?php echo $row['ending_date'];?></td>
-                                    <td><?php echo $row['status'];?></td>
-                                    <td>
-                                        <a href="" class="btn btn-sm btn-success">View Results</a>
-                                    </td>
-                                </tr>
-                            <?php
-                        }
-                    }else{
-                        ?>
-                            <tr>
-                                <td colspan="7" class="text-danger">There is no Elections added yet!</td>
-                            </tr>
-                        <?php
-                    }
+                if ($isAnyElectionAdded) {
+                    $sno = 1;
+                    while ($row = mysqli_fetch_assoc($fetchingData)) {
+                        $election_id = $row['id'];
                 ?>
-        </tbody>
-     </table>
+                        <tr>
+                            <td><?php echo $sno++; ?></td>
+                            <td><?php echo $row['election_topic']; ?></td>
+                            <td><?php echo $row['no_of_candidates']; ?></td>
+                            <td><?php echo $row['starting_date']; ?></td>
+                            <td><?php echo $row['ending_date']; ?></td>
+                            <td><?php echo $row['status']; ?></td>
+                            <td>
+                                <a href="index.php?viewResult=<?php echo $election_id; ?>" class="btn btn-sm btn-success">View Results</a>
+                            </td>
+                        </tr>
+                    <?php
+                    }
+                } else {
+                    ?>
+                    <tr>
+                        <td colspan="7" class="text-danger">There is no Elections added yet!</td>
+                    </tr>
+                <?php
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </div>
-

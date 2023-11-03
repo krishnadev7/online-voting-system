@@ -11,6 +11,9 @@
         else if(isset($_GET['addCandidate'])){
             require_once("./includes/add_candidate.php");
         }
+        else if(isset($_GET['viewResult'])){
+            require_once("./includes/viewResults.php");
+        }
     ?>
 <?php
     require_once('includes/footer.php');
